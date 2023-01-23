@@ -32,3 +32,27 @@ exports.Register = async(req,res)=>{
         res.status(500).send(error)
     }
 }
+exports.login=async(req,res)=>{
+const {email,password}=req.body
+    try {
+    const utilisateur=await user.findOne({email})
+    if(!utilisateur){
+        res.status(400).send({errors:[{msg:"email not found"}]})
+    }
+    else{
+        const match= await bcrypt.compare(password,utilisateur.password)
+        if(!match){
+            res.status(400).send({errors:[{msg:"wrong password"}]})
+                }
+            
+                else{
+                    const payload={id:utilisateur._id}
+                    const token=jwt.sign(payload,"hello")
+                    res.status(200).send({msg:"welcome home",utilisateur,token})
+                } 
+                
+            }
+} catch (error) {
+     res.status(500).send({errors:[{msg:'could not login'}]})
+}
+}
