@@ -1,15 +1,21 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { get_current } from '../Redux/Action/Action'
 
-export default class Profil extends Component {
-    constructor(){
-        super()
-    }
-  render() {
-    return (
-      <div>
-        <h1>Profile wissal</h1>
-      </div>
-    )
-  }
+const Profil = () => {
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(get_current())
+  },[dispatch])
+
+  const user=useSelector((state)=>state.UserReducer.users)
+  return (
+    <div>
+      <h1>{user.email}</h1>
+    </div>
+  )
 }
+
+export default Profil
+
 
